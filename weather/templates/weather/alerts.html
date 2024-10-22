@@ -1,19 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Alerts</title>
+    <title>Weather Summary Dashboard</title>
+    <style>
+        /* Global Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            color: #fff;
+            transition: background-image 1s ease-in-out;
+        }
+
+        h1 {
+            margin: 40px 0 10px;
+            font-size: 3.5rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .alert {
+            background-color: rgba(255, 99, 71, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            width: 80%;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .summary-container {
+            width: 90%;
+            max-width: 800px;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 15px 0;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .weather-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            width: 90%;
+            max-width: 1200px;
+            margin-top: 20px;
+        }
+
+        .weather-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            animation: slideIn 1s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            0% { transform: translateY(50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .footer {
+            margin-top: auto;
+            padding: 10px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .weather-card { padding: 15px; }
+        }
+
+        @media (max-width: 480px) {
+            .weather-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
-<body>
-    <h1>Weather Alerts</h1>
-    <ul>
-        {% for alert in alerts %}
-        <li>{{ alert.city }} - Temp: {{ alert.temp }}°C ({{ alert.timestamp }})</li>
-        {% empty %}
-        <li>No alerts.</li>
+<body id="weather-body">
+    <h1>Weather Summary Dashboard</h1>
+
+    {% if alert_message %}
+    <div class="alert">
+        {{ alert_message }}
+    </div>
+    {% endif %}
+
+    <div class="summary-container">
+        <p><strong>Average Temperature:</strong> {{ avg_temp }}°C</p>
+        <p><strong>Maximum Temperature:</strong> {{ max_temp }}°C</p>
+        <p><strong>Minimum Temperature:</strong> {{ min_temp }}°C</p>
+        <p><strong>Dominant Weather Condition:</strong> {{ dominant_condition.main }}</p>
+    </div>
+
+    <h2>City Weather Updates</h2>
+    <div class="weather-grid">
+        {% for data in weather_today %}
+        <div class="weather-card">
+            <h3>{{ data.city }}</h3>
+            <p>{{ data.main }}</p>
+            <p>Temperature: {{ data.temp }}°C</p>
+            <p>Feels like: {{ data.feels_like }}°C</p>
+        </div>
         {% endfor %}
-    </ul>
-    <a href="{% url 'home' %}">Back to Summary</a>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 Weather Dashboard. All Rights Reserved.</p>
+    </div>
+
+    <script>
+        // Dynamically set background based on weather condition
+        const condition = "{{ dominant_condition.main }}".toLowerCase();
+        const body = document.getElementById('weather-body');
+        let backgroundUrl;
+
+        switch (condition) {
+            case 'clear':
+                backgroundUrl = 'https://source.unsplash.com/1600x900/?sunny';
+                break;
+            case 'clouds':
+                backgroundUrl = 'https://source.unsplash.com/1600x900/?cloudy';
+                break;
+            case 'rain':
+                backgroundUrl = 'https://source.unsplash.com/1600x900/?rain';
+                break;
+            case 'snow':
+                backgroundUrl = 'https://source.unsplash.com/1600x900/?snow';
+                break;
+            default:
+                backgroundUrl = 'https://source.unsplash.com/1600x900/?weather';
+                break;
+        }
+
+        body.style.backgroundImage = `url(${backgroundUrl})`;
+    </script>
 </body>
 </html>
