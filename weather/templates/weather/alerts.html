@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Alerts</title>
+</head>
+<body>
+    <h1>Weather Alerts</h1>
+    <ul>
+        {% for alert in alerts %}
+        <li>{{ alert.city }} - Temp: {{ alert.temp }}°C ({{ alert.timestamp }})</li>
+        {% empty %}
+        <li>No alerts.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'home' %}">Back to Summary</a>
+</body>
+</html>

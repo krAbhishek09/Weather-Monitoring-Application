@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Summaries</title>
+</head>
+<body>
+    <h1>Daily Weather Summary</h1>
+    <table border="1">
+        <tr>
+            <th>City</th>
+            <th>Average Temp (°C)</th>
+            <th>Max Temp (°C)</th>
+            <th>Min Temp (°C)</th>
+            <th>Dominant Weather</th>
+        </tr>
+        {% for summary in summaries %}
+        <tr>
+            <td>{{ summary.city }}</td>
+            <td>{{ summary.avg_temp }}</td>
+            <td>{{ summary.max_temp }}</td>
+            <td>{{ summary.min_temp }}</td>
+            <td>{{ summary.dominant_weather }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">No data available.</td></tr>
+        {% endfor %}
+    </table>
+    <a href="{% url 'alerts' %}">View Alerts</a>
+</body>
+</html>

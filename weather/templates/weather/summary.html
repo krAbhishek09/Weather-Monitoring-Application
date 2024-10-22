@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Weather Summary Dashboard</title>
+    <style>
+        /* Global Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            margin: 20px 0;
+            font-size: 2.5rem;
+            text-align: center;
+            color: #333;
+        }
+
+        /* Alert Styling with Animation */
+        .alert {
+            background-color: #ff6b6b;
+            color: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Weather Summary Styling */
+        .summary-container {
+            width: 90%;
+            max-width: 800px;
+            margin-top: 20px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .summary-container p {
+            font-size: 1.1rem;
+            margin: 10px 0;
+            color: #444;
+        }
+
+        .weather-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #e0f7fa;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.8s ease-in-out;
+        }
+
+        .weather-card h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #0277bd;
+        }
+
+        @keyframes slideIn {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        .footer {
+            margin-top: auto;
+            padding: 10px;
+            text-align: center;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <h1>Weather Summary Dashboard</h1>
+
+    {% if alert_message %}
+    <div class="alert">
+        {{ alert_message }}
+    </div>
+    {% endif %}
+
+    <div class="summary-container">
+        <p><strong>Average Temperature:</strong> {{ avg_temp }}°C</p>
+        <p><strong>Maximum Temperature:</strong> {{ max_temp }}°C</p>
+        <p><strong>Minimum Temperature:</strong> {{ min_temp }}°C</p>
+        <p><strong>Dominant Weather Condition:</strong> {{ dominant_condition.main }}</p>
+
+        <h2>Hourly Weather Updates</h2>
+        <ul>
+            {% for data in weather_today %}
+            <li class="weather-card">
+                <h3>{{ data.city }} - {{ data.main }}</h3>
+                <p>{{ data.temp }}°C (Feels like {{ data.feels_like }}°C)</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 Weather Dashboard. All Rights Reserved.</p>
+    </div>
+</body>
+</html>
